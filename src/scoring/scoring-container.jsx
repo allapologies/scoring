@@ -1,14 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export const ScoringContainer = (props) => {
-      return (
-        <div>
+export class ScoringContainer extends React.Component {
 
-        </div>
-      );
-};
+    state = {
+        score: []
+    };
 
-ScoringContainer.propTypes = {};
+    handleSetScore = (score) => {
+        this.setState({ score })
+    };
 
-ScoringContainer.defaultProps = {};
+    static propTypes = {};
+
+    static defaultProps = {};
+
+    render () {
+        const { score } = this.state;
+        return (
+            <div>
+                {score.map((item) => item)}
+            </div>
+        );
+    }
+}
