@@ -1,15 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
+
+import { PinsSelection } from '../pins';
 
 export class ScoringContainer extends React.Component {
 
     state = {
-        score: []
+        score: [0, 1, 2]
     };
 
     handleSetScore = (score) => {
-        this.setState({ score })
+        this.setState(state => ( { score: _.concat(state.score, score) }))
     };
+
+    handleSelectPin = (value) => this.handleSetScore(value);
 
     static propTypes = {};
 
@@ -19,7 +24,8 @@ export class ScoringContainer extends React.Component {
         const { score } = this.state;
         return (
             <div>
-                {score.map((item) => item)}
+                <PinsSelection maxValue={10} onSelect={this.handleSelectPin} />
+                {_.map(score, (item) => item)}
             </div>
         );
     }
