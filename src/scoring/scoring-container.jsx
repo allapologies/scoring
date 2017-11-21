@@ -1,17 +1,62 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import _ from 'lodash';
 
 import { PinsSelection } from '../pins';
+import { ScoreBoard } from '../scoreboard'
+
+import { firstRoll, secondRoll, maxPins } from '../constants'
+import { isSpare, isStrike, cyclicChangeState } from './utils'
+
+class Score {
+    constructor (frame, roll, score) {
+        this.frame = frame;
+        this.roll = roll;
+        this.score = score;
+    }
+}
 
 export class ScoringContainer extends React.Component {
 
     state = {
-        score: [0, 1, 2]
+        score: [],
+        frame: 0,
+        roll: 0
     };
 
-    handleSetScore = (score) => {
-        this.setState(state => ( { score: _.concat(state.score, score) }))
+    updatePreviosStateConditionally = () => {
+
+    };
+
+    getNextFrameAndRoll = (score) => {
+        const result = { frame: null, roll: null };
+        const { roll, frame } = this.state;
+
+        if (isStrike(score, roll)) {
+            result.roll = firstRoll;
+            result.frame = cyclicChangeState(frame);
+        } else if (isSpare(score, roll)) {
+            result.roll = firstRoll;
+            result.frame = cyclicChangeState(frame);
+        } else {
+            result.roll = cyclicChangeState(roll);
+            result.frame = cyclicChangeState(frame);
+        }
+
+        return result
+    };
+
+
+    handleSetScore = (pinsHitted) => {
+        this.setState((state) => {
+
+            const score = this.updatePreviosStateConditionally(pinsHitted);
+            const nextState = this.getNextFrameAndRoll(pinsHitted);
+
+            return {
+                score,
+                ...nextState
+            }
+        })
     };
 
     handleSelectPin = (value) => this.handleSetScore(value);
@@ -25,7 +70,7 @@ export class ScoringContainer extends React.Component {
         return (
             <div>
                 <PinsSelection maxValue={10} onSelect={this.handleSelectPin} />
-                {_.map(score, (item) => item)}
+                <ScoreBoard score={score} />
             </div>
         );
     }
