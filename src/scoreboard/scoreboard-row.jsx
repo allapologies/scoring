@@ -11,22 +11,25 @@ import {framesNumber} from '../constants'
 export const ScoreBoardRow = (props) => {
 
     const { score, total } = props
+    if (_.isEmpty(score)) {
+        return null
+    }
 
     return (
         <tr>
-            {_.map(score, (roll, index) => {
+            {_.map(score, (frame, index) => {
 
-                // const { firstRoll, secondRoll, thirdRoll, isSpare, isStrike, totalScore } = score[index]
+                const [first, second, third] = frame;
 
                 return (
                     <Cell
                         key={index}
-                        firstRoll={1}
-                        secondRoll={2}
-                        thirdRoll={3}
-                        isSpare={false}
-                        isStrike={false}
-                        total={10}
+                        firstRoll={first}
+                        secondRoll={second}
+                        thirdRoll={third}
+                        isSpare={second === 10}
+                        isStrike={first === 10}
+                        total={first+second}
                     />
                 )
             }

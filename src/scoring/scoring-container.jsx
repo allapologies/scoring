@@ -5,13 +5,13 @@ import { PinsSelection } from '../pins';
 import { ScoreBoard } from '../scoreboard'
 
 import { firstRoll, secondRoll, maxPins } from '../constants'
-import { isSpare, isStrike, cyclicChangeState } from './utils'
+import { isSpare, isStrike, cyclicChangeFrame, cyclicChangeRoll, mapRollsToFrames } from './utils'
 
 class Score {
-    constructor (frame, roll, score) {
+    constructor (frame, roll, pins) {
         this.frame = frame;
         this.roll = roll;
-        this.score = score;
+        this.pins = pins;
     }
 }
 
@@ -19,12 +19,8 @@ export class ScoringContainer extends React.Component {
 
     state = {
         score: [],
-        frame: 0,
-        roll: 0
-    };
-
-    updatePreviosStateConditionally = () => {
-
+        frame: 1,
+        roll: 1
     };
 
     getNextFrameAndRoll = (score) => {
@@ -33,13 +29,13 @@ export class ScoringContainer extends React.Component {
 
         if (isStrike(score, roll)) {
             result.roll = firstRoll;
-            result.frame = cyclicChangeState(frame);
+            result.frame = cyclicChangeFrame(frame);
         } else if (isSpare(score, roll)) {
             result.roll = firstRoll;
-            result.frame = cyclicChangeState(frame);
+            result.frame = cyclicChangeFrame(frame);
         } else {
-            result.roll = cyclicChangeState(roll);
-            result.frame = cyclicChangeState(frame);
+            result.roll = cyclicChangeRoll(roll);
+            result.frame = roll === secondRoll ? cyclicChangeFrame(frame): frame;
         }
 
         return result
@@ -49,7 +45,7 @@ export class ScoringContainer extends React.Component {
     handleSetScore = (pinsHitted) => {
         this.setState((state) => {
 
-            const score = this.updatePreviosStateConditionally(pinsHitted);
+            const score = _.concat(state.score, new Score(state.frame, state.roll, pinsHitted))
             const nextState = this.getNextFrameAndRoll(pinsHitted);
 
             return {
@@ -69,8 +65,17 @@ export class ScoringContainer extends React.Component {
         const { score } = this.state;
         return (
             <div>
+                {_.map(score, (item, index) => {
+                    return (
+                        <div key={index}>
+                            <span>frame: {item.frame}</span>
+                            <span>roll: {item.roll}</span>
+                            <span>pins: {item.pins}</span>
+                        </div>
+                    )
+                })}
                 <PinsSelection maxValue={10} onSelect={this.handleSelectPin} />
-                <ScoreBoard score={score} />
+                <ScoreBoard score={mapRollsToFrames(score)} />
             </div>
         );
     }
