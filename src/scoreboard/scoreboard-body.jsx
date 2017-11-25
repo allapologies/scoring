@@ -5,7 +5,12 @@ import { ScoreBoardRow } from './scoreboard-row'
 
 export class ScoreboardBody extends React.Component {
     static propTypes = {
-        score: PropTypes.arrayOf(PropTypes.object)
+        score: PropTypes.arrayOf(PropTypes.shape({
+            frame: PropTypes.number,
+            first: PropTypes.number,
+            second: PropTypes.number,
+            third: PropTypes.number
+        }))
     };
 
     static defaultPropes = {

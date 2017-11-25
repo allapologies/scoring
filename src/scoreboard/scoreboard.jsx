@@ -12,7 +12,12 @@ export const ScoreBoard = ({ score }) => (
 );
 
 ScoreBoard.propTypes = {
-    score: PropTypes.array
+    score: PropTypes.arrayOf(PropTypes.shape({
+        frame: PropTypes.number,
+        first: PropTypes.number,
+        second: PropTypes.number,
+        third: PropTypes.number
+    }))
 };
 
 ScoreBoard.defaultProps = {

@@ -4,26 +4,22 @@ import PropTypes from 'prop-types';
 
 import { Cell } from './scoreboard-row-cell'
 
-import {framesNumber} from '../constants'
-
-// const frames = _.map(new Array(framesNumber), (item, index) => index +1 );
-
 export const ScoreBoardRow = (props) => {
 
-    const { score, total } = props
+    const { score, total } = props;
     if (_.isEmpty(score)) {
         return null
     }
 
     return (
         <tr>
-            {_.map(score, (frame, index) => {
+            {_.map(score, (frameData, index) => {
 
-                const [first, second, third] = frame;
+                const { frame, first, second, third } = frameData;
 
                 return (
                     <Cell
-                        key={index}
+                        key={frame + index}
                         firstRoll={first}
                         secondRoll={second}
                         thirdRoll={third}
@@ -39,13 +35,18 @@ export const ScoreBoardRow = (props) => {
             </td>
         </tr>
     )
-}
+};
 
 ScoreBoardRow.propTypes = {
-    score: PropTypes.array.isRequired,
+    score: PropTypes.arrayOf(PropTypes.shape({
+        frame: PropTypes.number,
+        first: PropTypes.number,
+        second: PropTypes.number,
+        third: PropTypes.number
+    })),
     total: PropTypes.number
-}
+};
 
 ScoreBoardRow.defaultProps = {
     total: 0
-}
+};
