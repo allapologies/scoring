@@ -25,7 +25,7 @@ export class ScoreboardBody extends React.Component {
                 <ScoreBoardRow
                     player={'Allo'}
                     score={score}
-                    total={''}
+                    total={10}
                 />
             </tbody>
         )
