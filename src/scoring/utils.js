@@ -36,8 +36,8 @@ export const mapRollsToFrames = (gameRolls) => {
 };
 
 
-const countRegularFrame = ({ frame, first = 0, second = 0, third = 0 }, score) => {
-        return toInteger(first) + toInteger(second) + toInteger(third) + getPreviousTotal(score, frame)
+const countRegularFrame = ({ frame, first = 0, second = 0, third = 0 }) => {
+        return toInteger(first) + toInteger(second) + toInteger(third)
     }
 ;
 
@@ -78,6 +78,28 @@ export const hasNext2Rolls = (frames = []) => {
     return (hasNextRoll(next) && hasNextRoll(afterNext)) || has2rollsInFrame(_.head(frames))
 };
 
+export const getNext2Rolls = (frames = []) => {
+    let value = 10;
+
+    const next = _.head(frames);
+    const afterNext = _.head(_.slice(frames, 1, 2));
+
+    if (next.first && !_.isNull(next.first)) {
+        value += next.first
+    }
+    //
+    if (next.second && !_.isNull(next.second)) {
+        value += next.second
+    }
+    // else if (!_.isNull(afterNext.second)) {
+    //     value += afterNext.second
+    // }
+
+    // value = countRegularFrame(_.head(frames));
+
+    return value
+};
+
 // export const getCurrentTotal = (score, currentTotal = null) => {
 //     if (isEmpty(score)) {
 //         return currentTotal
@@ -94,21 +116,37 @@ export const hasNext2Rolls = (frames = []) => {
 // };
 
 export const getCurrentTotal = (score) => {
-   let result = 0;
+    let result = 0;
 
-   _.forEach(score, (frameData, index) => {
-       if (isStrike(frameData.first, 1)) {
-           if (hasNext2Rolls(_.slice(score, index, index + 2))) {
-               result += _.slice(score, index, index + 2)
-           }
-       } else if (isSpare(frameData.first + frameData.second)) {
+    _.forEach(score, (frameData, index) => {
+        if (_.isNull(result)) {
+            return false
+        }
 
-       }
+        if (isStrike(frameData.first, 1)) {
+            if (hasNext2Rolls(_.slice(score, index, index + 2))) {
+                result += getNext2Rolls(_.slice(score, index, index + 2))
+                return false
+            } else {
+                result = null;
+                return false
+            }
+        }
 
-       result += frameData.first + frameData.second
+        if (isSpare(frameData.first + frameData.second, 2)) {
+            if (hasNextRoll(_.slice(score, index + 1, index + 2))) {
+                //
 
-   });
+            } else {
+                result = null;
+                return false
+            }
+        }
 
-   return result
+        result += countRegularFrame(frameData)
+    });
+
+
+    return result
 };
 

@@ -4,7 +4,8 @@ import {
     calculateScoreData,
     getCurrentTotal,
     hasNextRoll,
-    hasNext2Rolls
+    hasNext2Rolls,
+    getNext2Rolls
 } from '../utils';
 import { isArray } from 'lodash'
 
@@ -117,6 +118,42 @@ describe('getCurrentTotal', () => {
             {
                 frame: 1,
                 first: 10
+            }
+        ];
+
+
+        const expected = null;
+
+        const actual = getCurrentTotal(scoreData);
+        expect(actual).toEqual(expected);
+    });
+    it('handles strike and next', () => {
+
+        const scoreData = [
+            {
+                frame: 1,
+                first: 10
+            },
+            {
+                frame: 2,
+                first: 1,
+                second: 2
+            }
+        ];
+
+
+        const expected = 16;
+
+        const actual = getCurrentTotal(scoreData);
+        expect(actual).toEqual(expected);
+    });
+    it('handles spare', () => {
+
+        const scoreData = [
+            {
+                frame: 1,
+                first: 2,
+                second: 8
             }
         ];
 
@@ -316,6 +353,31 @@ describe('has2rollsInFrame', () => {
         const expected = false;
 
         const actual = has2rollsInFrame(scoreData);
+        expect(actual).toEqual(expected);
+    });
+
+});
+
+describe('getNext2Rolls', () => {
+
+    it('returns result for after strike', () => {
+
+        const scoreData = [
+            {
+                frame: 1,
+                first: 10
+            },
+            {
+                frame: 2,
+                first: 1,
+                second: 2
+            }
+        ];
+
+
+        const expected = 16;
+
+        const actual = getNext2Rolls(scoreData);
         expect(actual).toEqual(expected);
     });
 
