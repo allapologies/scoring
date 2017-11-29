@@ -53,4 +53,54 @@ describe('calculate', () => {
 
         expect(actual).toBe(expected);
     });
+    it('calculates strike', () => {
+        const score = [
+            {
+                frame: 1,
+                roll: 1,
+                pins: 10
+            },
+            {
+                frame: 2,
+                roll: 1,
+                pins: 2
+            },
+            {
+                frame: 2,
+                roll: 2,
+                pins: 5
+            }
+        ];
+
+
+        const expected = 24;
+        const actual = calculate(score);
+
+        expect(actual).toBe(expected);
+    });
+    it('calculates spare', () => {
+        const score = [
+            {
+                frame: 1,
+                roll: 1,
+                pins: 8
+            },
+            {
+                frame: 1,
+                roll: 2,
+                pins: 2
+            },
+            {
+                frame: 2,
+                roll: 1,
+                pins: 3
+            }
+        ];
+
+
+        const expected = 16;
+        const actual = calculate(score);
+
+        expect(actual).toBe(expected);
+    });
 });
