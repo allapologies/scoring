@@ -5,27 +5,27 @@ import { ScoreBoardRow } from './scoreboard-row'
 
 export class ScoreboardBody extends React.Component {
     static propTypes = {
-        score: PropTypes.arrayOf(PropTypes.shape({
-            frame: PropTypes.number,
-            first: PropTypes.number,
-            second: PropTypes.number,
-            third: PropTypes.number
-        }))
+        frames: PropTypes.arrayOf(PropTypes.shape({
+            firstRoll: PropTypes.number,
+            secondRoll: PropTypes.number,
+            thirdRoll: PropTypes.number,
+            total: PropTypes.number
+        })),
+        total: PropTypes.number
     };
 
     static defaultPropes = {
-        score: []
+        frames: [],
+        total: void 0
     };
 
     render () {
-        const { score } = this.props
-        // const total = score[9].totalScore
+        const { frames, total } = this.props;
         return (
             <tbody>
                 <ScoreBoardRow
-                    player={'Allo'}
-                    score={score}
-                    total={10}
+                    frames={frames}
+                    total={total}
                 />
             </tbody>
         )

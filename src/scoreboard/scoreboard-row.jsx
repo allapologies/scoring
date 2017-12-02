@@ -2,33 +2,33 @@ import React from 'react'
 import _ from 'lodash'
 import PropTypes from 'prop-types';
 
-import { Cell } from './scoreboard-row-cell'
+import { Cell } from './scoreboard-row-cell';
 
-export const ScoreBoardRow = (props) => {
+import { maxPins, framesNumber } from '../constants'
 
-    const { score, total } = props;
-    if (_.isEmpty(score)) {
-        return null
-    }
+const rows = new Array(framesNumber).fill().map((item, i) => i);
+
+export const ScoreBoardRow = ({ frames, total }) => {
 
     return (
         <tr>
-            {_.map(score, (frameData, index) => {
-
-                const { frame, first, second, third } = frameData;
-
-                return (
-                    <Cell
-                        key={frame + index}
-                        firstRoll={first}
-                        secondRoll={second}
-                        thirdRoll={third}
-                        isSpare={second === 10}
-                        isStrike={first === 10}
-                        total={first+second}
-                    />
-                )
-            }
+            {_.map(rows, (row) => {
+                    if (!frames[row]) {
+                        return <td key={row}/>
+                    }
+                    const { firstRoll, secondRoll, thirdRoll, total } = frames[row];
+                    return (
+                        <Cell
+                            key={row}
+                            firstRoll={firstRoll}
+                            secondRoll={secondRoll}
+                            thirdRoll={thirdRoll}
+                            isSpare={secondRoll === maxPins}
+                            isStrike={firstRoll === maxPins}
+                            total={total}
+                        />
+                    )
+                }
             )}
             <td>
                 {total}
@@ -38,15 +38,16 @@ export const ScoreBoardRow = (props) => {
 };
 
 ScoreBoardRow.propTypes = {
-    score: PropTypes.arrayOf(PropTypes.shape({
-        frame: PropTypes.number,
-        first: PropTypes.number,
-        second: PropTypes.number,
-        third: PropTypes.number
+    frames: PropTypes.arrayOf(PropTypes.shape({
+        firstRoll: PropTypes.number,
+        secondRoll: PropTypes.number,
+        thirdRoll: PropTypes.number,
+        total: PropTypes.number
     })),
     total: PropTypes.number
 };
 
 ScoreBoardRow.defaultProps = {
-    total: 0
+    frames: [],
+    total: void 0
 };

@@ -4,81 +4,94 @@ import _ from 'lodash';
 import { PinsSelection } from '../pins';
 import { ScoreBoard } from '../scoreboard'
 
-import { initialFrameIndex, firstRoll, secondRoll, maxPins } from '../constants'
-import { isSpare, isStrike, cyclicChangeFrame, cyclicChangeRoll, mapRollsToFrames } from './utils'
+import { initialFrameIndex, firstRoll, secondRoll, maxPins, framesNumber } from '../constants'
+import {
+    isSpare,
+    isStrike,
+    incrementFrame,
+    cyclicChangeRoll,
+    mapRollsToFrames,
+    createRoll,
+    createFrame
+} from './utils'
+import { calculate } from './calculate'
 
-class Score {
-    constructor (frame, roll, pins) {
-        this.frame = frame;
-        this.roll = roll;
-        this.pins = pins;
-    }
-}
 
 export class ScoringContainer extends React.Component {
 
     state = {
-        score: [],
+        rolls: [],
         frame: initialFrameIndex,
         roll: firstRoll,
-        remaining: maxPins
+        remaining: maxPins,
+        frames: [],
+        isFinished: false,
+        total: null
     };
 
-    getNextFrameAndRoll = (score) => {
+    updateFrames = () => {
+        const { rolls, frames, roll, frame } = this.state;
+        if (roll !== firstRoll) {
+            return void 0
+        }
+
+        const first = _.get(_.find(rolls, { frame: frame - 1, roll: firstRoll }), 'pins', 0);
+        const second = _.get(_.find(rolls, { frame: frame - 1, roll: secondRoll }), 'pins', 0);
+
+        const frameTotal = first + second;
+
+        this.setState({
+            frames: _.concat(frames, createFrame(first, second, frameTotal)),
+            total: calculate(rolls)
+        })
+    };
+
+    getNextFrameAndRoll = (pins) => {
         const result = { frame: null, roll: null };
         const { roll, frame } = this.state;
 
-        if (isStrike(score, roll)) {
+        if (isStrike(pins, roll)) {
             result.roll = firstRoll;
-            result.frame = cyclicChangeFrame(frame);
-        } else if (isSpare(score, roll)) {
+            result.frame = incrementFrame(frame);
+        } else if (isSpare(pins, roll)) {
             result.roll = firstRoll;
-            result.frame = cyclicChangeFrame(frame);
+            result.frame = incrementFrame(frame);
         } else {
             result.roll = cyclicChangeRoll(roll);
-            result.frame = roll === secondRoll ? cyclicChangeFrame(frame) : frame;
+            result.frame = roll === secondRoll ? incrementFrame(frame) : frame;
         }
 
         return result
     };
 
 
-    handleSetScore = (pinsHitted) => {
+    updateScore = (pinsHitted) => {
         this.setState((state) => {
-
-            const score = _.concat(state.score, new Score(state.frame, state.roll, pinsHitted))
+            const rolls = _.concat(state.rolls, createRoll(state.frame, state.roll, pinsHitted, null));
             const { frame, roll } = this.getNextFrameAndRoll(pinsHitted);
 
             return {
-                score,
+                rolls,
                 frame,
                 roll,
                 remaining: roll === firstRoll ? maxPins : maxPins - pinsHitted
             }
-        })
+        }, () => this.updateFrames())
     };
 
-    handleSelectPin = (value) => this.handleSetScore(value);
+    handleSelectPin = (pins) => this.updateScore(pins);
 
     static propTypes = {};
 
     static defaultProps = {};
 
     render () {
-        const { score, remaining } = this.state;
+        const { isFinished, remaining, total, frames } = this.state;
         return (
             <div>
-                <PinsSelection maxValue={remaining} onSelect={this.handleSelectPin} />
-                <ScoreBoard score={mapRollsToFrames(score)} />
-                {_.map(score, (item, index) => {
-                    return (
-                        <div key={index}>
-                            <span>frame: {item.frame}</span>
-                            <span>roll: {item.roll}</span>
-                            <span>pins: {item.pins}</span>
-                        </div>
-                    )
-                })}
+                {isFinished && <div>The Game has finished</div>}
+                {!isFinished && <PinsSelection maxValue={remaining} onSelect={this.handleSelectPin} />}
+                <ScoreBoard frames={frames} total={total} />
             </div>
         );
     }
