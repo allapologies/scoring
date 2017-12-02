@@ -13,7 +13,7 @@ export const handleStrike = (arr) => {
     return result
 };
 
-export const isSpare = (array, index) => pins === maxPins;
+export const isSpare = pins => pins === maxPins;
 
 
 export const handleSpare = (arr, index) => {

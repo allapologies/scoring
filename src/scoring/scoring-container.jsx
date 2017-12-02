@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { PinsSelection } from '../pins';
 import { ScoreBoard } from '../scoreboard'
 
-import { firstRoll, secondRoll, maxPins } from '../constants'
+import { initialFrameIndex, firstRoll, secondRoll, maxPins } from '../constants'
 import { isSpare, isStrike, cyclicChangeFrame, cyclicChangeRoll, mapRollsToFrames } from './utils'
 
 class Score {
@@ -19,8 +19,9 @@ export class ScoringContainer extends React.Component {
 
     state = {
         score: [],
-        frame: 1,
-        roll: 1
+        frame: initialFrameIndex,
+        roll: firstRoll,
+        remaining: maxPins
     };
 
     getNextFrameAndRoll = (score) => {
@@ -46,11 +47,13 @@ export class ScoringContainer extends React.Component {
         this.setState((state) => {
 
             const score = _.concat(state.score, new Score(state.frame, state.roll, pinsHitted))
-            const nextState = this.getNextFrameAndRoll(pinsHitted);
+            const { frame, roll } = this.getNextFrameAndRoll(pinsHitted);
 
             return {
                 score,
-                ...nextState
+                frame,
+                roll,
+                remaining: roll === firstRoll ? maxPins : maxPins - pinsHitted
             }
         })
     };
@@ -62,7 +65,7 @@ export class ScoringContainer extends React.Component {
     static defaultProps = {};
 
     render () {
-        const { score } = this.state;
+        const { score, remaining } = this.state;
         return (
             <div>
                 {_.map(score, (item, index) => {
@@ -74,7 +77,7 @@ export class ScoringContainer extends React.Component {
                         </div>
                     )
                 })}
-                <PinsSelection maxValue={10} onSelect={this.handleSelectPin} />
+                <PinsSelection maxValue={remaining} onSelect={this.handleSelectPin} />
                 <ScoreBoard score={mapRollsToFrames(score)} />
             </div>
         );
