@@ -36,7 +36,7 @@ export class ScoringContainer extends React.Component {
             result.frame = cyclicChangeFrame(frame);
         } else {
             result.roll = cyclicChangeRoll(roll);
-            result.frame = roll === secondRoll ? cyclicChangeFrame(frame): frame;
+            result.frame = roll === secondRoll ? cyclicChangeFrame(frame) : frame;
         }
 
         return result
@@ -68,6 +68,8 @@ export class ScoringContainer extends React.Component {
         const { score, remaining } = this.state;
         return (
             <div>
+                <PinsSelection maxValue={remaining} onSelect={this.handleSelectPin} />
+                <ScoreBoard score={mapRollsToFrames(score)} />
                 {_.map(score, (item, index) => {
                     return (
                         <div key={index}>
@@ -77,8 +79,6 @@ export class ScoringContainer extends React.Component {
                         </div>
                     )
                 })}
-                <PinsSelection maxValue={remaining} onSelect={this.handleSelectPin} />
-                <ScoreBoard score={mapRollsToFrames(score)} />
             </div>
         );
     }
