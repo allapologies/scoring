@@ -1,42 +1,44 @@
-import { forEach, slice, head } from 'lodash';
-import { maxPins, firstRoll, secondRoll } from '../constants'
+import { forEach, slice, head, reduce, map, get } from 'lodash';
+import { maxPins, firstRoll, secondRoll, framesNumber } from '../constants'
 
-export const isStrike = (array, index) => array[index].pins === maxPins;
+export const isStrike = (rolls, index) => rolls[index] === maxPins;
 
-export const handleStrike = (arr) => {
-    let result = 0;
 
-    forEach(arr, (item) => {
-        result += item.pins
-    });
-
-    return result
+export const handleStrike = (rolls, index) => {
+    return rolls[index] + rolls[index + 1] + rolls[index + 2]
 };
 
-export const isSpare = pins => pins === maxPins;
-
-
-export const handleSpare = (arr, index) => {
-
-
+export const isSpare = (rolls, index) => {
+    return rolls[index] + rolls[index + 1] === maxPins
 };
+
+export const handleSpare = (rolls, index) => rolls[index] + rolls[index + 1] + rolls[index + 2];
 
 export const calculate = (scoringArray) => {
+
+    const rolls = map(scoringArray, (item) => item.pins);
+
     let result = 0;
     let rollIndex = 0;
 
-    for (let i = 0; i < scoringArray.length; i++) {
-        if (isStrike(slice(scoringArray, rollIndex, rollIndex + 1))) {
-            result += scoringArray[rollIndex].pins + handleStrike(slice(scoringArray, rollIndex, rollIndex + 1));
+    for (let frameIndex = 0; frameIndex < framesNumber; frameIndex++) {
+        if (isStrike(rolls, rollIndex)) {
+            result += handleStrike(rolls, rollIndex) || 0;
+            rollIndex += 1;
+        } else if (isSpare(rolls, rollIndex)) {
+            result += handleSpare(rolls, rollIndex) || 0;
             rollIndex += 2;
-        } else if (isSpare(scoringArray[rollIndex].pins)) {
-            result += scoringArray[rollIndex].pins + handleSpare();
-            rollIndex++;
         } else {
-            result += scoringArray[rollIndex].pins;
-            rollIndex++;
+            result += rolls[rollIndex] || 0;
+            rollIndex += 1;
         }
     }
 
     return result
 };
+
+
+
+
+
+
