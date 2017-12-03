@@ -37,7 +37,7 @@ export class ScoringContainer extends React.Component {
         const first = _.get(_.find(rolls, { frame: frame - 1, roll: firstRoll }), 'pins', 0);
         const second = _.get(_.find(rolls, { frame: frame - 1, roll: secondRoll }), 'pins', 0);
 
-        const frameTotal = first + second;
+        const frameTotal = calculate(_.slice(rolls, ));
 
         this.setState({
             frames: _.concat(frames, createFrame(first, second, frameTotal)),
@@ -83,7 +83,7 @@ export class ScoringContainer extends React.Component {
     render () {
         const { isFinished, remaining, total, frames } = this.state;
         return (
-            <div>
+            <div className='container'>
                 {isFinished && <div>The Game has finished</div>}
                 {!isFinished && <PinsSelection maxValue={remaining} onSelect={this.handleSelectPin} />}
                 <ScoreBoard frames={frames} total={total} />

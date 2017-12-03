@@ -3,6 +3,7 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 
 import { Pin } from './pin'
+import './styles.css';
 
 export const PinsSelection = ({ onSelect, maxValue, isHidden }) => {
     if (isHidden) {
@@ -11,7 +12,7 @@ export const PinsSelection = ({ onSelect, maxValue, isHidden }) => {
 
     const values = _.times(maxValue + 1);
     return (
-        <div>
+        <div className="pinsSelection">
             {_.map(values, (value) => <Pin key={value} value={value} onClick={onSelect} />)}
         </div>
     )

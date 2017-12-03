@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
+import './styles.css';
+
 export class Pin extends React.PureComponent {
 
     static propTypes = {
@@ -19,6 +21,7 @@ export class Pin extends React.PureComponent {
         const { value } = this.props;
         return (
             <button
+                className='pin btn btn-secondary'
                 type="button"
                 onClick={this.handleClick}
             >

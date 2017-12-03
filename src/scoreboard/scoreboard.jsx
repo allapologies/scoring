@@ -4,8 +4,10 @@ import PropTypes from 'prop-types';
 import { ScoreBoardHead } from './scoreboard-head'
 import { ScoreboardBody } from './scoreboard-body'
 
+import './scoreboard.css'
+
 export const ScoreBoard = ({ frames, total }) => (
-    <table>
+    <table className ='table table-bordered scoreboard'>
         <ScoreBoardHead />
         <ScoreboardBody frames={frames} total={total}/>
     </table>
