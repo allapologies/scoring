@@ -4,13 +4,12 @@ import _ from 'lodash';
 import { PinsSelection } from '../pins';
 import { ScoreBoard } from '../scoreboard'
 
-import { initialFrameIndex, firstRoll, secondRoll, maxPins, framesNumber } from '../constants'
+import { initialFrameIndex, firstRoll, secondRoll, maxPins } from '../constants'
 import {
     isSpare,
     isStrike,
     incrementFrame,
     cyclicChangeRoll,
-    mapRollsToFrames,
     createRoll,
     createFrame
 } from './utils'
@@ -80,10 +79,6 @@ export class ScoringContainer extends React.Component {
     };
 
     handleSelectPin = (pins) => this.updateScore(pins);
-
-    static propTypes = {};
-
-    static defaultProps = {};
 
     render () {
         const { isFinished, remaining, total, frames } = this.state;
