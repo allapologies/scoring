@@ -10,8 +10,8 @@ import {
     isStrike,
     incrementFrame,
     cyclicChangeRoll,
-    createRoll,
-    createFrame
+    createFrame,
+    updateScoreInFrame
 } from './utils'
 import { calculate } from './calculate'
 
@@ -19,30 +19,12 @@ import { calculate } from './calculate'
 export class ScoringContainer extends React.Component {
 
     state = {
-        rolls: [],
         frame: initialFrameIndex,
         roll: firstRoll,
         remaining: maxPins,
         frames: [],
         isFinished: false,
         total: null
-    };
-
-    updateFrames = () => {
-        const { rolls, frames, roll, frame } = this.state;
-        if (roll !== firstRoll) {
-            return void 0
-        }
-
-        const first = _.get(_.find(rolls, { frame: frame - 1, roll: firstRoll }), 'pins', 0);
-        const second = _.get(_.find(rolls, { frame: frame - 1, roll: secondRoll }), 'pins', 0);
-
-        const frameTotal = calculate(_.slice(rolls, ));
-
-        this.setState({
-            frames: _.concat(frames, createFrame(first, second, frameTotal)),
-            total: calculate(rolls)
-        })
     };
 
     getNextFrameAndRoll = (pins) => {
@@ -66,16 +48,24 @@ export class ScoringContainer extends React.Component {
 
     updateScore = (pinsHitted) => {
         this.setState((state) => {
-            const rolls = _.concat(state.rolls, createRoll(state.frame, state.roll, pinsHitted, null));
-            const { frame, roll } = this.getNextFrameAndRoll(pinsHitted);
+            const { frame, roll, frames } = state;
+
+            const { frame: nextFrame, roll: nextRoll } = this.getNextFrameAndRoll(pinsHitted);
+
+            const updatedFrames = roll === firstRoll
+                ? _.concat(frames, createFrame(pinsHitted, null, null))
+                : updateScoreInFrame(frames, frame - 1, roll, pinsHitted);
+
 
             return {
-                rolls,
-                frame,
-                roll,
-                remaining: roll === firstRoll ? maxPins : maxPins - pinsHitted
+                frame: nextFrame,
+                roll: nextRoll,
+                remaining: nextRoll === firstRoll ? maxPins : maxPins - pinsHitted,
+                frames: updatedFrames,
+                isFinished: false,
+                total: 300
             }
-        }, () => this.updateFrames())
+        })
     };
 
     handleSelectPin = (pins) => this.updateScore(pins);

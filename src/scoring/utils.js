@@ -1,4 +1,4 @@
-import _, { forEach, map, assign, toInteger, find, get, isEmpty, last, dropRight } from 'lodash'
+import _ from 'lodash'
 import { firstRoll, secondRoll, maxPins, framesNumber } from '../constants'
 
 export const isSpare = (pinsHitted, roll) => roll === secondRoll && (pinsHitted === maxPins);
@@ -9,19 +9,10 @@ export const cyclicChangeRoll = (rollIndex) => rollIndex === firstRoll ? secondR
 
 
 const rollMap = {
-    '1': 'first',
-    '2': 'second',
-    '3': 'third'
+    '1': 'firstRoll',
+    '2': 'secondRoll',
+    '3': 'thirdRoll'
 };
-
-export const createRoll = (frame, roll, pins, total) => (
-    {
-        frame,
-        roll,
-        pins,
-        total
-    }
-);
 
 export const createFrame = (firstRoll, secondRoll, total) => (
     {
@@ -30,28 +21,9 @@ export const createFrame = (firstRoll, secondRoll, total) => (
         total
     }
 );
-// export const mapRollsToFrames = (rolls, frameResults) => {
-//     const result = [];
-//
-//     forEach(rolls, (rollItem) => {
-//         if (result[rollItem.frame - 1]) {
-//             result[rollItem.frame - 1][rollMap[rollItem.roll]] = rollItem.pins
-//         } else {
-//             result.push({ [rollMap[rollItem.roll]]: rollItem.pins, frame: rollItem.frame })
-//         }
-//     });
-//
-//     return result
-// };
 
-// firstRoll: PropTypes.number,
-//     secondRoll: PropTypes.number,
-//     thirdRoll: PropTypes.number,
-//     total: PropTypes.number
-
-const allFrames = new Array(framesNumber).fill().map((item, i) => i);
-
-export const mapRollsToFrames = (rolls, frameResults) => {
-
-};
-
+export const updateScoreInFrame = (frames, frameIndex, rollIndex, score) =>
+    _.map(frames, (frame, index) => index === frameIndex
+        ? _.assign({}, frame, { [rollMap[rollIndex]]: score })
+        : frame
+    );
