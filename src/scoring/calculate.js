@@ -1,4 +1,4 @@
-import { forEach, slice, head, reduce, map, get } from 'lodash';
+import _, { forEach, slice, head, reduce, map, get } from 'lodash';
 import { maxPins, firstRoll, secondRoll, framesNumber } from '../constants'
 
 export const isStrike = (rolls, index) => rolls[index] === maxPins;
@@ -14,9 +14,14 @@ export const isSpare = (rolls, index) => {
 
 export const handleSpare = (rolls, index) => rolls[index] + rolls[index + 1] + rolls[index + 2];
 
-export const calculate = (scoringArray) => {
+const mapFramesToRolls = (frames) =>
+    _.reduce(frames, (result,frame, idx) =>
+        _.concat(result, frame.firstRoll, frame.secondRoll), []);
 
-    const rolls = map(scoringArray, (item) => item.pins);
+
+export const calculate = (frames) => {
+
+    const rolls = mapFramesToRolls(frames);
 
     let result = 0;
     let rollIndex = 0;
@@ -36,8 +41,6 @@ export const calculate = (scoringArray) => {
 
     return result
 };
-
-
 
 
 

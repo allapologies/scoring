@@ -27,3 +27,23 @@ export const updateScoreInFrame = (frames, frameIndex, rollIndex, score) =>
         ? _.assign({}, frame, { [rollMap[rollIndex]]: score })
         : frame
     );
+
+export const getNextFrameAndRoll = (currentFrame, currentRoll, pinsHitted) => {
+    const result = { nextFrame: null, nextRoll: null };
+
+    if (isStrike(pinsHitted, currentRoll)) {
+        result.nextRoll = firstRoll;
+        result.nextFrame = incrementFrame(currentFrame);
+    } else if (isSpare(pinsHitted, currentRoll)) {
+        result.nextRoll = firstRoll;
+        result.nextFrame = incrementFrame(currentFrame);
+    } else {
+        result.nextRoll = cyclicChangeRoll(currentRoll);
+        result.nextFrame = currentRoll === secondRoll ? incrementFrame(currentFrame) : currentFrame;
+    }
+
+    return result
+};
+
+export const getNextRollRemainingPins = (nextRollIndex, pinsHitted) =>
+    nextRollIndex === firstRoll ? maxPins : maxPins - pinsHitted;
