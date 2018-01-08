@@ -1,19 +1,21 @@
 import { calculate } from '../';
 
-export const createRolls = (number, pins) => {
-    const rolls = [];
+export const createFrame = (firstRoll = null, secondRoll = null, total = null) => ({
+    firstRoll,
+    secondRoll,
+    total
+});
 
-    for (let i = 0; i < number; i++) {
-        rolls.push(
-            {
-                frame: null,
-                roll: null,
-                pins
-            }
-        )
+
+const createFrames = (framesNumber, pins) => {
+    const result = [];
+
+    for (let i = 0; i < framesNumber; i++) {
+        result.push(createFrame(pins, pins))
     }
 
-    return rolls
+    return result
+
 };
 
 describe('calculate', () => {
@@ -29,77 +31,61 @@ describe('calculate', () => {
 
         expect(actual).toBe(expected);
     });
-    it('calculates single roll', () => {
-        const score = createRolls(1, 5);
+    it('calculates single roll in frame', () => {
+        const frames = [createFrame(5)];
 
         const expected = 5;
-        const actual = calculate(score);
+        const actual = calculate(frames);
 
         expect(actual).toBe(expected);
     });
-    it('calculates 2 rolls', () => {
-        const score = createRolls(2, 3);
+    it('calculates 2 rolls in a frame', () => {
+        const frames = createFrames(1, 3);
 
         const expected = 6;
-        const actual = calculate(score);
+        const actual = calculate(frames);
 
         expect(actual).toBe(expected);
     });
-    it('calculates 20 rolls', () => {
-        const score = createRolls(4, 20);
-
+    it('calculates 10 frames', () => {
+        const frames = createFrames(10, 4);
         const expected = 80;
-        const actual = calculate(score);
+        const actual = calculate(frames);
 
         expect(actual).toBe(expected);
     });
     it('calculates strike', () => {
-        const score = [
+        const frames = [
             {
-                frame: 1,
-                roll: 1,
-                pins: 10
+                firstRoll: 10,
+                secondRoll: null,
             },
             {
-                frame: 2,
-                roll: 1,
-                pins: 2
-            },
-            {
-                frame: 2,
-                roll: 2,
-                pins: 5
+                firstRoll: 2,
+                secondRoll: 5
             }
         ];
 
 
         const expected = 24;
-        const actual = calculate(score);
+        const actual = calculate(frames);
 
         expect(actual).toBe(expected);
     });
     it('calculates spare', () => {
-        const score = [
+        const frames = [
             {
-                frame: 1,
-                roll: 1,
-                pins: 8
+                firstRoll: 8,
+                secondRoll: 2
             },
             {
-                frame: 1,
-                roll: 2,
-                pins: 2
-            },
-            {
-                frame: 2,
-                roll: 1,
-                pins: 3
+                firstRoll: 3,
+                secondRoll: null
             }
         ];
 
-
         const expected = 16;
-        const actual = calculate(score);
+        const actual = calculate(frames);
 
         expect(actual).toBe(expected);
     });
