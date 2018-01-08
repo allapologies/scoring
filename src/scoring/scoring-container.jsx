@@ -7,7 +7,7 @@ import { ScoreBoard } from '../scoreboard'
 import { initialFrameIndex, firstRoll, maxPins } from '../constants'
 import {
     createFrame,
-    updateScoreInFrame, getNextFrameAndRoll, getNextRollRemainingPins
+    updateScoreInPreviousFrame, getNextFrameAndRoll, getNextRollRemainingPins, updateTotalInPreviousFrame
 } from './utils'
 import { calculate } from './calculate'
 
@@ -27,21 +27,26 @@ export class ScoringContainer extends React.Component {
         this.setState((state) => {
             const { frame, roll, frames } = state;
 
+            let updatedFrames = [];
+
+            if (roll === firstRoll) {
+                updatedFrames = _.concat(
+                    frames,
+                    createFrame(pinsHitted, null, null))
+            } else {
+                updatedFrames = updateScoreInPreviousFrame(frames, roll, pinsHitted);
+                updatedFrames = updateTotalInPreviousFrame(updatedFrames)
+            }
+
             const { nextFrame, nextRoll } = getNextFrameAndRoll(frame, roll, pinsHitted);
 
-            const updatedFrames = roll === firstRoll
-                ? _.concat(
-                    updateScoreInFrame(frames, roll, pinsHitted),
-                    createFrame(pinsHitted, null, null))
-                : updateScoreInFrame(frames, roll, pinsHitted);
-
             return {
-                frame: nextFrame,
-                roll: nextRoll,
-                remaining: getNextRollRemainingPins(nextRoll, pinsHitted),
                 frames: updatedFrames,
                 isFinished: false,
-                total: calculate(updatedFrames)
+                total: calculate(updatedFrames),
+                frame: nextFrame,
+                roll: nextRoll,
+                remaining: getNextRollRemainingPins(nextRoll, pinsHitted)
             }
         })
     };

@@ -24,12 +24,17 @@ export const createFrame = (firstRoll, secondRoll, thirdRoll, total = null) => (
     }
 );
 
-export const updateScoreInFrame = (frames, rollIndex, score) =>
+export const updateScoreInPreviousFrame = (frames, rollIndex, score) =>
     _.map(frames, (frame, index) => index === frames.length - 1
-        ? _.assign({}, frame, { [rollMap[rollIndex]]: score }, { total: calculate(frames) })
+        ? _.assign({}, frame, { [rollMap[rollIndex]]: score })
         : frame
-    )
-;
+    );
+
+export const updateTotalInPreviousFrame = (frames) =>
+    _.map(frames, (frame, index) => index === frames.length - 1
+        ? _.assign({}, frame, { total: calculate(frames) })
+        : frame
+    );
 
 export const getNextFrameAndRoll = (currentFrame, currentRoll, pinsHitted) => {
     const result = { nextFrame: null, nextRoll: null };
