@@ -1,8 +1,10 @@
+import _ from 'lodash';
 import { calculate } from '../';
 
-export const createFrame = (firstRoll = null, secondRoll = null, total = null) => ({
+export const createFrame = (firstRoll = null, secondRoll = null, thirdRoll = null, total = null) => ({
     firstRoll,
     secondRoll,
+    thirdRoll,
     total
 });
 
@@ -85,6 +87,14 @@ describe('calculate', () => {
         ];
 
         const expected = 16;
+        const actual = calculate(frames);
+
+        expect(actual).toBe(expected);
+    });
+    it('calculates 10 strikes', () => {
+        const frames = _.times(9, () => createFrame(10)).concat(createFrame(10, 10, 10));
+
+        const expected = 300;
         const actual = calculate(frames);
 
         expect(actual).toBe(expected);

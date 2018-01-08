@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { maxPins } from '../constants'
+import { framesNumber, maxPins, secondRoll } from '../constants'
 
 export const isStrike = (rolls, index) => rolls[index] === maxPins;
 
@@ -16,13 +16,16 @@ export const handleSpare = (rolls, index) => rolls[index] + rolls[index + 1] + r
 
 const mapFramesToRolls = (frames) =>
     _.reduce(frames, (result, frame, idx) =>
-        _.concat(result, frame.firstRoll, frame.firstRoll !== maxPins ? frame.secondRoll : []), []);
+        _.concat(result,
+            frame.firstRoll,
+            frame.firstRoll !== maxPins ? frame.secondRoll : [],
+            frame.thirdRoll || []
+        ), []);
 
 
 export const calculate = (frames) => {
 
     const rolls = mapFramesToRolls(frames);
-
     let result = 0;
     let rollIndex = 0;
 

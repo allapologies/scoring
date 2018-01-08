@@ -30,8 +30,10 @@ export class ScoringContainer extends React.Component {
             const { nextFrame, nextRoll } = getNextFrameAndRoll(frame, roll, pinsHitted);
 
             const updatedFrames = roll === firstRoll
-                ? _.concat(frames, createFrame(pinsHitted, null, null))
-                : updateScoreInFrame(frames, frame - 1, roll, pinsHitted);
+                ? _.concat(
+                    updateScoreInFrame(frames, roll, pinsHitted),
+                    createFrame(pinsHitted, null, null))
+                : updateScoreInFrame(frames, roll, pinsHitted);
 
             return {
                 frame: nextFrame,

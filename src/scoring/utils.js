@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import { firstRoll, secondRoll, maxPins, framesNumber } from '../constants'
+import { calculate } from './'
 
 export const isSpare = (pinsHitted, roll) => roll === secondRoll && (pinsHitted === maxPins);
 export const isStrike = (pinsHitted, roll) => roll === firstRoll && (pinsHitted === maxPins);
@@ -14,19 +15,21 @@ const rollMap = {
     '3': 'thirdRoll'
 };
 
-export const createFrame = (firstRoll, secondRoll, total) => (
+export const createFrame = (firstRoll, secondRoll, thirdRoll, total = null) => (
     {
         firstRoll,
         secondRoll,
+        thirdRoll,
         total
     }
 );
 
-export const updateScoreInFrame = (frames, frameIndex, rollIndex, score) =>
-    _.map(frames, (frame, index) => index === frameIndex
-        ? _.assign({}, frame, { [rollMap[rollIndex]]: score })
+export const updateScoreInFrame = (frames, rollIndex, score) =>
+    _.map(frames, (frame, index) => index === frames.length - 1
+        ? _.assign({}, frame, { [rollMap[rollIndex]]: score }, { total: calculate(frames) })
         : frame
-    );
+    )
+;
 
 export const getNextFrameAndRoll = (currentFrame, currentRoll, pinsHitted) => {
     const result = { nextFrame: null, nextRoll: null };
