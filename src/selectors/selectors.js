@@ -5,16 +5,8 @@ import { FRAMES_COUNT, TOTAL_PINS, FIRST_ROLL, SECOND_ROLL } from '../actions/co
 
 
 export const stepSelector = (state) => state.steps.step
-
-export const getFramesSlice = createSelector(
-    (state) => state.frames,
-    (frames) => frames
-)
-
-export const framesDataSelector = createSelector(
-    [getFramesSlice],
-    (framesSlice) => framesSlice.data
-)
+export const framesSelector = (state) => state.frames
+export const framesDataSelector = (state) => state.frames.data
 
 const nextRollHasPlayed = (frames, currenFrameIndex) => {
     return _.get(_.nth(frames, currenFrameIndex + 1), 'firstRoll', null) !== null
@@ -78,7 +70,7 @@ export const currentScoreSelector = createSelector(
 )
 
 export const currentFrameAndRollSelector = createSelector(
-    [getFramesSlice],
+    [framesSelector],
     (framesSlice) => {
         const currentFrame = framesSlice.currentFrame
         const currentRoll = framesSlice.currentRoll
@@ -113,7 +105,7 @@ export const getCurrentPlayerMeta = createSelector(
 )
 
 export const getIsFinished = createSelector(
-    [getFramesSlice],
+    [framesSelector],
     (framesSlice) => framesSlice.isFinished
 )
 
@@ -123,7 +115,7 @@ const getScoreByFrameIdAndRollId = (frameId, rollId, data) => {
 }
 
 export const getAvailablePins = createSelector(
-    [getFramesSlice, framesDataSelector],
+    [framesSelector, framesDataSelector],
     (framesSlice, data) => {
         const currentRoll = framesSlice.currentRoll
         const currentFrame = framesSlice.currentFrame

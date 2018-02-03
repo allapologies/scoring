@@ -1,8 +1,7 @@
-import { getFramesSlice, framesDataSelector } from '../selectors'
+import { framesSelector, framesDataSelector } from '../selectors'
 
 describe('selectors: ', () => {
-
-    describe('getFramesSlice', () => {
+    describe('framesSelector', () => {
         it('returns frames slice', () => {
             const state = {
                 frames: {
@@ -14,7 +13,7 @@ describe('selectors: ', () => {
                 anyProp: 'anyString'
             }
 
-            const actual = getFramesSlice(state)
+            const actual = framesSelector(state)
 
             expect(actual).toEqual(expected)
         })
@@ -23,22 +22,11 @@ describe('selectors: ', () => {
     describe('framesDataSelector', () => {
         it('returns frames data', () => {
             const state = {
-                data: ['a']
-            }
-
-            const expected = ['a']
-
-            const actual = framesDataSelector.resultFunc(state)
-
-            expect(actual).toEqual(expected)
-        })
-
-        it('works with composing selectors', () => {
-            const state = {
                 frames: {
                     data: ['a']
                 }
             }
+
             const expected = ['a']
 
             const actual = framesDataSelector(state)
