@@ -1,0 +1,20 @@
+export const START_NEW_GAME = 'START_NEW_GAME'
+export const REPLAY_GAME = 'REPLAY_GAME'
+export const GAME_FINISH = 'GAME_FINISH'
+
+export const GAME_INIT = 'GAME_INIT'
+export const GAME_SET_STEP = 'GAME_SET_STEP'
+export const GAME_START_FRAME = 'GAME_START_FRAME'
+export const GAME_START_ROLL = 'GAME_START_ROLL'
+
+export const GAME_ADD_PLAYER = 'GAME_ADD_PLAYER'
+export const GAME_REMOVE_PLAYER = 'GAME_REMOVE_PLAYER'
+export const GAME_NEXT_PLAYER = 'GAME_NEXT_PLAYER'
+
+export const GAME_THROW_BALL = 'GAME_THROW_BALL'
+export const GAME_THROW_BALL_SUCCESS = 'GAME_THROW_BALL_SUCCESS'
+
+export const FRAMES_COUNT = 10
+export const TOTAL_PINS = 10
+export const FIRST_ROLL = 1
+export const SECOND_ROLL = 2
