@@ -13,7 +13,7 @@ export const getFramesSlice = createSelector(
 
 export const framesDataSelector = createSelector(
     [getFramesSlice],
-    (framesSlice) => framesSlice.get('data').toJS()
+    (framesSlice) => framesSlice.data
 )
 
 const nextRollHasPlayed = (frames, currenFrameIndex) => {

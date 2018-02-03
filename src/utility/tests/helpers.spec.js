@@ -1,6 +1,6 @@
 import { getMax } from '../helpers'
 
-xdescribe('helpers', () => {
+describe('helpers', () => {
     describe('getMax', () => {
         it('exports', () => {
             expect(getMax).toBeDefined()
