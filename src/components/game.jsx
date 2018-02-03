@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../actions'
@@ -15,13 +16,13 @@ export const Game = connect((state) => ({
     class Game extends React.Component {
 
         static propTypes = {
-            currentPlayer: React.PropTypes.shape({
-                name: React.PropTypes.string,
-                id: React.PropTypes.string
+            currentPlayer: PropTypes.shape({
+                name: PropTypes.string,
+                id: PropTypes.string
             }),
-            throwBall: React.PropTypes.func.isRequired,
-            isFinished: React.PropTypes.bool,
-            remainingPins: React.PropTypes.number.isRequired
+            throwBall: PropTypes.func.isRequired,
+            isFinished: PropTypes.bool,
+            remainingPins: PropTypes.number.isRequired
         }
 
         render () {

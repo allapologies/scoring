@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import PropTypes from 'prop-types';
+import React from 'react';
 import _ from 'lodash'
 import { connect } from 'react-redux'
 
@@ -12,7 +13,7 @@ export const ScoreboardBody = connect((state) => ({
     total: getScore(state)
 }))(class ScoreboardBody extends React.Component {
     static propTypes = {
-        players: PropTypes.arrayOf(React.PropTypes.object),
+        players: PropTypes.arrayOf(PropTypes.object),
         score: PropTypes.array,
         total: PropTypes.number
     }

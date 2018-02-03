@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import _ from 'lodash'
 import { connect } from 'react-redux'
@@ -13,10 +14,10 @@ export const Players = connect((state) => ({
     startGame: () => dispatch(actions.startGame())
 }))(class Players extends React.Component {
     static propTypes = {
-        addPlayer: React.PropTypes.func,
-        removePlayer: React.PropTypes.func,
-        startGame: React.PropTypes.func,
-        players: React.PropTypes.array
+        addPlayer: PropTypes.func,
+        removePlayer: PropTypes.func,
+        startGame: PropTypes.func,
+        players: PropTypes.array
     }
 
     constructor (props) {
