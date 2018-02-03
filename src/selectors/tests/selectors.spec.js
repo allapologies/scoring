@@ -1,4 +1,3 @@
-import { Map as iMap, List as iList } from 'immutable'
 import { getFramesSlice, framesDataSelector } from '../selectors'
 
 describe('selectors: ', () => {
@@ -23,9 +22,9 @@ describe('selectors: ', () => {
 
     describe('framesDataSelector', () => {
         it('returns frames data', () => {
-            const state = iMap({
-                data: iList(['a'])
-            })
+            const state = {
+                data: ['a']
+            }
 
             const expected = ['a']
 
@@ -36,9 +35,9 @@ describe('selectors: ', () => {
 
         it('works with composing selectors', () => {
             const state = {
-                frames: iMap({
-                    data: iList(['a'])
-                })
+                frames: {
+                    data: ['a']
+                }
             }
             const expected = ['a']
 

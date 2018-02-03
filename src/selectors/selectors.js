@@ -1,10 +1,8 @@
 import _ from 'lodash'
-import Immutable from 'immutable'
-import { createSelector, createSelectorCreator, defaultMemoize } from 'reselect'
+import { createSelector } from 'reselect'
 
 import { FRAMES_COUNT, TOTAL_PINS, FIRST_ROLL, SECOND_ROLL } from '../actions/constants'
 
-const createImmutableSelector = createSelectorCreator(defaultMemoize, Immutable.is)
 
 export const stepSelector = (state) => state.steps.step
 
@@ -13,7 +11,7 @@ export const getFramesSlice = createSelector(
     (frames) => frames
 )
 
-export const framesDataSelector = createImmutableSelector(
+export const framesDataSelector = createSelector(
     [getFramesSlice],
     (framesSlice) => framesSlice.get('data').toJS()
 )
@@ -82,8 +80,8 @@ export const currentScoreSelector = createSelector(
 export const currentFrameAndRollSelector = createSelector(
     [getFramesSlice],
     (framesSlice) => {
-        const currentFrame = framesSlice.get('currentFrame')
-        const currentRoll = framesSlice.get('currentRoll')
+        const currentFrame = framesSlice.currentFrame
+        const currentRoll = framesSlice.currentRoll
         return { currentFrame, currentRoll }
     }
 )
@@ -93,17 +91,17 @@ export const getPlayersSlice = createSelector(
     (players) => players
 )
 
-export const playersSelector = createImmutableSelector(
+export const playersSelector = createSelector(
     [getPlayersSlice],
-    (playersSlice) => playersSlice.get('players').toJS()
+    (playersSlice) => playersSlice.players
 )
 
-export const currentPlayerSelector = createImmutableSelector(
+export const currentPlayerSelector = createSelector(
     [getPlayersSlice],
-    (playersSlice) => playersSlice.get('currentPlayer')
+    (playersSlice) => playersSlice.currentPlayer
 )
 
-export const getCurrentPlayerMeta = createImmutableSelector(
+export const getCurrentPlayerMeta = createSelector(
     [playersSelector, currentPlayerSelector],
     (players, currentPlayer) => {
         const data = _.find(
@@ -114,9 +112,9 @@ export const getCurrentPlayerMeta = createImmutableSelector(
     }
 )
 
-export const getIsFinished = createImmutableSelector(
+export const getIsFinished = createSelector(
     [getFramesSlice],
-    (framesSlice) => framesSlice.get('isFinished')
+    (framesSlice) => framesSlice.isFinished
 )
 
 const getScoreByFrameIdAndRollId = (frameId, rollId, data) => {
@@ -124,11 +122,11 @@ const getScoreByFrameIdAndRollId = (frameId, rollId, data) => {
     return TOTAL_PINS - result.score
 }
 
-export const getAvailablePins = createImmutableSelector(
+export const getAvailablePins = createSelector(
     [getFramesSlice, framesDataSelector],
     (framesSlice, data) => {
-        const currentRoll = framesSlice.get('currentRoll')
-        const currentFrame = framesSlice.get('currentFrame')
+        const currentRoll = framesSlice.currentRoll
+        const currentFrame = framesSlice.currentFrame
 
         switch (currentRoll) {
             case FIRST_ROLL:
@@ -141,7 +139,7 @@ export const getAvailablePins = createImmutableSelector(
     }
 )
 
-export const getScore = createImmutableSelector(
+export const getScore = createSelector(
     [framesDataSelector],
     (rolls) => _.reduce(rolls, (result, roll, index) => {
         if (isSpare(rolls, index)) {
