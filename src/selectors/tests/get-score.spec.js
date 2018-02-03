@@ -10,7 +10,6 @@ const createRolls = (value, number) =>
     }))
 
 describe('selectors: ', () => {
-
     describe('getScore', () => {
 
         it('calculates zero rolls', () => {

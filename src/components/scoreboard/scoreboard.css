@@ -1,0 +1,50 @@
+.row {
+  border: 1px solid black;
+  height: 50px;
+
+  &_player {
+
+    &_name {
+      width: 150px;
+      height: 50px;
+    }
+
+    &_total {
+      width: 70px;
+    }
+  }
+}
+
+.cell {
+  width: 50px;
+  border-left: 1px solid black;
+  border-spacing: 0 0;
+
+  &_td {
+    box-sizing: border-box;
+    padding: 0;
+  }
+
+  &_triple {
+    width: 75px;
+  }
+
+  &_points {
+    height: 25px;
+
+    &_first, &_second {
+      width: 25px;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    &_second {
+      border-left: 1px solid black;
+      border-bottom: 1px solid black;
+    }
+    &_total {
+      height: 25px;
+      padding: 0;
+    }
+  }
+}
+
