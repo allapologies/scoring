@@ -12,68 +12,6 @@ export const getPlayersSlice = (state) => state.players
 export const playersSelector = (state) => state.players.players
 export const currentPlayerSelector = (state) => state.players.currentPlayer
 
-
-const nextRollHasPlayed = (frames, currenFrameIndex) => {
-    return _.get(_.nth(frames, currenFrameIndex + 1), 'firstRoll', null) !== null
-}
-
-
-const zeroToNull = (int) => int == 0 ? null : int
-
-const isSpare = (firstRollScore = 0, secondRollScore = 0) =>
-    firstRollScore + secondRollScore === TOTAL_PINS
-
-
-const isStrike = (firstRollScore, /** secondRollScore = 0 **/) =>
-    firstRollScore === TOTAL_PINS
-
-
-const handleSpare = (index, rolls) =>
-    zeroToNull(_.get(_.nth(rolls, index), 'score', 0) + _.get(_.nth(rolls, index + 1), 'score', 0))
-
-
-const handleStrike = (index, rolls) =>
-    zeroToNull(_.get(_.nth(rolls, index), 'score', 0) + _.get(_.nth(rolls, index + 1), 'score', 0) + _.get(_.nth(rolls, index + 2), 'score', 0))
-
-
-const getNormalScore = (index, rolls) =>
-    zeroToNull(_.get(_.nth(rolls, index), 'score', 0) + _.get(_.nth(rolls, index + 1), 'score', 0))
-
-
-export const currentScoreSelector = createSelector(
-    [framesDataSelector],
-    (rolls) => {
-        let score = new Array(FRAMES_COUNT)
-        score = _.map(score, () => ({
-            firstRoll: null,
-            secondRoll: null,
-            isStrike: false,
-            isSpare: false,
-            totalScore: null
-        }))
-
-        if (!_.isEmpty(rolls)) {
-            _.forEach(rolls, (roll, rollIndex) => {
-
-                if (isStrike(_.has(_.nth(rolls, rollIndex), 'score', false))) {
-                    score[rollIndex].isStrike = true
-                    score[rollIndex].totalScore = handleStrike(rollIndex, rolls)
-                    rollIndex += 2
-                } else if (isSpare(rolls[rollIndex].score, rolls[rollIndex + 1].score)) {
-                    score[rollIndex].isSpare = true
-                    score[rollIndex].totalScore = handleSpare(rollIndex, rolls)
-                    rollIndex += 1
-                } else {
-                    score[rollIndex].totalScore = getNormalScore(rollIndex, rolls)
-                    rollIndex += 1
-                }
-            })
-        }
-
-        return score
-    }
-)
-
 export const currentFrameAndRollSelector = createSelector(
     [framesSelector],
     (framesSlice) => {
@@ -115,21 +53,4 @@ export const getAvailablePins = createSelector(
                 return TOTAL_PINS
         }
     }
-)
-
-export const getScore = createSelector(
-    [framesDataSelector],
-    (rolls) => _.reduce(rolls, (result, roll, index) => {
-        if (isSpare(rolls, index)) {
-            result += handleSpare(rolls, index)
-        }
-
-        if (isStrike(rolls, index)) {
-            result += handleStrike(rolls, index)
-        }
-
-        result += roll.score
-
-        return result
-    }, 0)
 )
