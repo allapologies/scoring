@@ -4,13 +4,13 @@ import { TOTAL_PINS, FIRST_ROLL, SECOND_ROLL } from '../actions/constants'
 
 export const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min
 
-export const getMax = (data, currentFrame, currentRoll) => {
+export const getMax = (rollsData = [], currentFrame, currentRoll) => {
     let max = TOTAL_PINS
     if (currentRoll === FIRST_ROLL) {
         return max
     }
 
-    const firstRoll = _.find(data, { frameId: currentFrame, rollId: FIRST_ROLL })
+    const firstRoll = _.find(rollsData, { frameId: currentFrame, rollId: FIRST_ROLL })
     max -= firstRoll.score
 
     return max

@@ -1,22 +1,11 @@
 import { getMax } from '../helpers'
 
-describe('helpers', () => {
+xdescribe('helpers', () => {
     describe('getMax', () => {
-        it('exports', () => {
-            expect(getMax).toBeDefined()
-        })
-        it('returns number', () => {
-
-            const expected = 'number'
-            const actual = getMax()
-
-            expect(typeof actual).toEqual(expected)
-        })
-
         it('returns 10 if passed empty object', () => {
             const expected = 10
 
-            const data = {}
+            const data = []
             const actual = getMax(data)
 
             expect(actual).toEqual(expected)

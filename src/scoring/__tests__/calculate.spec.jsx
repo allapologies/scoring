@@ -1,24 +1,4 @@
-import _ from 'lodash';
 import { calculate } from '../';
-
-export const createFrame = (firstRoll = null, secondRoll = null, thirdRoll = null, total = null) => ({
-    firstRoll,
-    secondRoll,
-    thirdRoll,
-    total
-});
-
-
-const createFrames = (framesNumber, pins) => {
-    const result = [];
-
-    for (let i = 0; i < framesNumber; i++) {
-        result.push(createFrame(pins, pins))
-    }
-
-    return result
-
-};
 
 describe('calculate', () => {
     it('function of arity 1', () => {
@@ -29,62 +9,43 @@ describe('calculate', () => {
     });
     it('returns an integer', () => {
         const expected = 'number';
-        const actual = typeof calculate();
+        const actual = typeof calculate([1]);
 
         expect(actual).toBe(expected);
     });
     it('calculates single roll in frame', () => {
-        const frames = [createFrame(5)];
+        const rolls = [5];
 
         const expected = 5;
-        const actual = calculate(frames);
+        const actual = calculate(rolls);
 
         expect(actual).toBe(expected);
     });
     it('calculates 2 rolls in a frame', () => {
-        const frames = createFrames(1, 3);
+        const rolls = [3, 3];
 
         const expected = 6;
-        const actual = calculate(frames);
+        const actual = calculate(rolls);
 
         expect(actual).toBe(expected);
     });
     it('calculates 10 frames', () => {
-        const frames = createFrames(10, 4);
+        const rolls = [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4];
         const expected = 80;
-        const actual = calculate(frames);
+        const actual = calculate(rolls);
 
         expect(actual).toBe(expected);
     });
     it('calculates strike', () => {
-        const frames = [
-            {
-                firstRoll: 10,
-                secondRoll: null,
-            },
-            {
-                firstRoll: 2,
-                secondRoll: 5
-            }
-        ];
-
+        const rolls = [10, 2, 5]
 
         const expected = 24;
-        const actual = calculate(frames);
+        const actual = calculate(rolls);
 
         expect(actual).toBe(expected);
     });
     it('calculates spare', () => {
-        const frames = [
-            {
-                firstRoll: 8,
-                secondRoll: 2
-            },
-            {
-                firstRoll: 3,
-                secondRoll: null
-            }
-        ];
+        const frames = [8, 2, 3];
 
         const expected = 16;
         const actual = calculate(frames);
@@ -92,7 +53,7 @@ describe('calculate', () => {
         expect(actual).toBe(expected);
     });
     it('calculates 10 strikes', () => {
-        const frames = _.times(9, () => createFrame(10)).concat(createFrame(10, 10, 10));
+        const frames = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10];
 
         const expected = 300;
         const actual = calculate(frames);
