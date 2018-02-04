@@ -19,13 +19,7 @@ export default function (state = INITIAL_STATE, action) {
         case actions.GAME_THROW_BALL_SUCCESS:
             return {
                 ...state,
-                data: [
-                    ...state.data, {
-                        frameId: action.frameId,
-                        rollId: action.rollId,
-                        score: action.score
-                    }
-                ]
+                data: [...state.data, action.score]
             }
         case actions.GAME_FINISH:
             return { ...state, isFinished: true }

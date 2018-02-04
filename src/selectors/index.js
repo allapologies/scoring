@@ -1,5 +1,8 @@
-export { framesSelector, getPlayersSlice,
+export {
+    framesSelector,
     playersSelector, currentPlayerSelector, currentFrameAndRollSelector,
-    getCurrentPlayerMeta, framesDataSelector, currentScoreSelector,
-    stepSelector, getIsFinished, getAvailablePins, getScore
+    getCurrentPlayerMeta, framesDataSelector,
+    stepSelector, getIsFinished, getAvailablePins, getTotal
 } from './selectors'
+
+export { calculate } from './calculate'

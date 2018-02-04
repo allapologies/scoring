@@ -16,23 +16,23 @@ export const ScoreBoardRow = (props) => {
             <td>
                 {player.name}
             </td>
-            {_.map(rollsArray, (roll, index) => {
+            {/*{_.map(rollsArray, (roll, index) => {*/}
 
-                const { firstRoll, secondRoll, thirdRoll, isSpare, isStrike, totalScore } = score[index]
+                {/*const { firstRoll, secondRoll, thirdRoll, isSpare, isStrike, totalScore } = score[index]*/}
 
-                return (
-                    <Cell
-                        key={index}
-                        firstRoll={firstRoll}
-                        secondRoll={secondRoll}
-                        thirdRoll={thirdRoll}
-                        isSpare={isSpare}
-                        isStrike={isStrike}
-                        total={totalScore}
-                    />
-                )
-            }
-            )}
+                {/*return (*/}
+                    {/*<Cell*/}
+                        {/*key={index}*/}
+                        {/*firstRoll={firstRoll}*/}
+                        {/*secondRoll={secondRoll}*/}
+                        {/*thirdRoll={thirdRoll}*/}
+                        {/*isSpare={isSpare}*/}
+                        {/*isStrike={isStrike}*/}
+                        {/*total={totalScore}*/}
+                    {/*/>*/}
+                {/*)*/}
+            {/*}*/}
+            {/*)}*/}
             <td>
                 {total}
             </td>

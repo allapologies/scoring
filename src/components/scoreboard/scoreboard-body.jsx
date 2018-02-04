@@ -3,14 +3,14 @@ import React from 'react';
 import _ from 'lodash'
 import { connect } from 'react-redux'
 
-import { playersSelector, currentScoreSelector, getScore } from '../../selectors'
+import { playersSelector, currentScoreSelector, getTotal } from '../../selectors'
 
 import { ScoreBoardRow } from './scoreboard-row'
 
 export const ScoreboardBody = connect((state) => ({
     players: playersSelector(state),
-    score: currentScoreSelector(state),
-    total: getScore(state)
+    // score: currentScoreSelector(state),
+    total: getTotal(state)
 }))(class ScoreboardBody extends React.Component {
     static propTypes = {
         players: PropTypes.arrayOf(PropTypes.object),
@@ -34,7 +34,7 @@ export const ScoreboardBody = connect((state) => ({
                     <ScoreBoardRow
                         key={player.id}
                         player={player}
-                        score={score}
+                        score={[]}
                         total={total}
                     />
                 )

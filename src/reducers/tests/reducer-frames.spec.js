@@ -69,13 +69,7 @@ describe('Reducer - frames', () => {
         const expected = {
             currentFrame: null,
             currentRoll: null,
-            data: [
-                    {
-                        frameId: 1,
-                        rollId: 1,
-                        score: 4
-                    }
-            ]
+            data: [4]
         }
 
         const actual = frames(state, action)
@@ -87,13 +81,7 @@ describe('Reducer - frames', () => {
         const state = {
             currentFrame: null,
             currentRoll: null,
-            data: [
-                    {
-                        frameId: 1,
-                        rollId: 1,
-                        score: 4
-                    }
-            ]
+            data: [4]
         }
 
         const action = {
@@ -107,18 +95,7 @@ describe('Reducer - frames', () => {
         const expected = {
             currentFrame: null,
             currentRoll: null,
-            data: [
-                    {
-                        frameId: 1,
-                        rollId: 1,
-                        score: 4
-                    },
-                    {
-                        frameId: 3,
-                        rollId: 2,
-                        score: 2
-                    }
-            ]
+            data: [4, 2]
         }
 
         const actual = frames(state, action)
